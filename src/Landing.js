@@ -1,7 +1,42 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
+import * as BooksAPI from "./BooksAPI";
+
 class Landing extends Component {
+    state = {
+        currentlyReading: [],
+        wantToRead: [],
+        readBooks: [],
+    };
+
+    componentDidMount = () => {
+        this.handleSetShelves();
+    };
+
+    handleSetShelves = () => {
+        BooksAPI.getAll()
+            .then((res) => {
+                let current = res.filter((book) => {
+                    return book.shelf === "currentlyReading";
+                });
+                let want = res.filter((book) => {
+                    return book.shelf === "wantToRead";
+                });
+                let read = res.filter((book) => {
+                    return book.shelf === "read";
+                });
+                this.setState({
+                    currentlyReading: current,
+                    wantToRead: want,
+                    readBooks: read,
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
     render() {
         return (
             <div>

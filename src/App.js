@@ -1,6 +1,6 @@
 import React from "react";
 import { Route } from "react-router-dom";
-// import * as BooksAPI from './BooksAPI'
+import * as BooksAPI from "./BooksAPI";
 import "./App.css";
 
 import Landing from "./Landing";
@@ -11,7 +11,14 @@ class BooksApp extends React.Component {
         books: [],
     };
 
-    componentDidMount = () => {};
+    componentDidMount = () => {
+        BooksAPI.getAll().then((books) => {
+            console.log(books);
+            this.setState(() => ({
+                books,
+            }));
+        });
+    };
 
     render() {
         return (
