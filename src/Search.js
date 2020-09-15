@@ -1,8 +1,48 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
+import * as BooksAPI from "./BooksAPI";
+import BookDisplay from "./BookDisplay";
+
 class Search extends Component {
+    state = {
+        value: "",
+        books: [],
+    };
+
+    componentDidMount = () => {};
+
+    handleChange = (e) => {
+        this.setState({ value: e.target.value });
+        this.handleSearch();
+    };
+
+    handleSearch = () => {
+        BooksAPI.search(this.state.value)
+            .then((res) => {
+                this.setState({ books: res.length ? res : [] });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+
+    /*
+    could be more modular...
+    add books to needed objectson landing page
+    */
+    handleSwitchShelves = (e, book) => {
+        if (book.shelf !== e.target.value) {
+            BooksAPI.update({ id: book.id }, e.target.value)
+                .then((res) => {})
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
+    };
+
     render() {
+        const { value, books } = this.state;
         return (
             <div>
                 <div className="search-books">
@@ -11,22 +51,30 @@ class Search extends Component {
                             <button className="close-search">Close</button>
                         </Link>
                         <div className="search-books-input-wrapper">
-                            {/*
-                            NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                            You can find these search terms here:
-                            https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
-
-                            However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                            you don't find a specific author or title. Every search is limited by search terms.
-                            */}
                             <input
                                 type="text"
                                 placeholder="Search by title or author"
+                                value={value}
+                                onChange={this.handleChange}
                             />
                         </div>
                     </div>
                     <div className="search-books-results">
-                        <ol className="books-grid"></ol>
+                        <ol className="books-grid">
+                            {books.length > 0 &&
+                                books.map((book) => {
+                                    return (
+                                        <li key={book.id}>
+                                            <BookDisplay
+                                                book={book}
+                                                handleSwitchShelves={
+                                                    this.handleSwitchShelves
+                                                }
+                                            />
+                                        </li>
+                                    );
+                                })}
+                        </ol>
                     </div>
                 </div>
             </div>

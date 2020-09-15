@@ -18,6 +18,7 @@ class Landing extends Component {
     handleSetShelves = () => {
         BooksAPI.getAll()
             .then((res) => {
+                console.log(res);
                 let current = res.filter((book) => {
                     return book.shelf === "currentlyReading";
                 });
