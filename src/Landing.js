@@ -39,12 +39,20 @@ class Landing extends Component {
     };
 
     handleSwitchShelves = (e, book) => {
-        //if (book.shelf !== eb)
+        console.log(e.target.value);
+        if (book.shelf !== e.target.value) {
+            BooksAPI.update({ id: book.id }, e.target.value)
+                .then((res) => {
+                    this.handleSetShelves();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
     };
 
     render() {
         const { currentlyReading, wantToRead, readBooks } = this.state;
-        console.log(this.state.currentlyReading);
         return (
             <div>
                 <div className="list-books">
