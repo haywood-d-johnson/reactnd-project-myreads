@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 import * as BooksAPI from "./BooksAPI";
-import BookDisplay from "./BookDisplay";
+import BookShelf from "./BookShelf";
 
 class Landing extends Component {
     state = {
@@ -60,70 +60,21 @@ class Landing extends Component {
                     </div>
                     <div className="list-books-content">
                         <div>
-                            <div className="bookshelf">
-                                <h2 className="bookshelf-title">
-                                    Currently Reading
-                                </h2>
-                                <div className="bookshelf-books">
-                                    <ol className="books-grid">
-                                        {currentlyReading.map((book) => {
-                                            return (
-                                                <li key={book.id}>
-                                                    <BookDisplay
-                                                        book={book}
-                                                        handleSwitchShelves={
-                                                            this
-                                                                .handleSwitchShelves
-                                                        }
-                                                    />
-                                                </li>
-                                            );
-                                        })}
-                                    </ol>
-                                </div>
-                            </div>
-                            <div className="bookshelf">
-                                <h2 className="bookshelf-title">
-                                    Want to Read
-                                </h2>
-                                <div className="bookshelf-books">
-                                    <ol className="books-grid">
-                                        {wantToRead.map((book) => {
-                                            return (
-                                                <li key={book.id}>
-                                                    <BookDisplay
-                                                        book={book}
-                                                        handleSwitchShelves={
-                                                            this
-                                                                .handleSwitchShelves
-                                                        }
-                                                    />
-                                                </li>
-                                            );
-                                        })}
-                                    </ol>
-                                </div>
-                            </div>
-                            <div className="bookshelf">
-                                <h2 className="bookshelf-title">Read</h2>
-                                <div className="bookshelf-books">
-                                    <ol className="books-grid">
-                                        {readBooks.map((book) => {
-                                            return (
-                                                <li key={book.id}>
-                                                    <BookDisplay
-                                                        book={book}
-                                                        handleSwitchShelves={
-                                                            this
-                                                                .handleSwitchShelves
-                                                        }
-                                                    />
-                                                </li>
-                                            );
-                                        })}
-                                    </ol>
-                                </div>
-                            </div>
+                            <BookShelf
+                                books={currentlyReading}
+                                title="Currently Reading"
+                                handleSwitchShelves={this.handleSwitchShelves}
+                            />
+                            <BookShelf
+                                books={wantToRead}
+                                title="Want To Read"
+                                handleSwitchShelves={this.handleSwitchShelves}
+                            />
+                            <BookShelf
+                                books={readBooks}
+                                title="Read"
+                                handleSwitchShelves={this.handleSwitchShelves}
+                            />
                         </div>
                     </div>
                     <div className="open-search">
