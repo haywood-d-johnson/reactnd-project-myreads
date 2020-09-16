@@ -24,7 +24,11 @@ const BookDisplay = (props) => {
             <div className="book-top">
                 <div className="book-cover" style={bookStyle}></div>
                 <div className="book-shelf-changer">
-                    <select value={book.shelf} onChange={changeValue}>
+                    <select
+                        defaultValue="none"
+                        //value={book.shelf}
+                        onChange={changeValue}
+                    >
                         <option value="move" disabled>
                             Move to...
                         </option>

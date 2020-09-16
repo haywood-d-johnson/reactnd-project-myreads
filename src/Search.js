@@ -24,6 +24,9 @@ class Search extends Component {
     }
 
     handleSwitchShelves = (e, book) => {
+        console.log(book.id);
+        console.log(book.shelf);
+        console.log(e.target.value);
         if (book.shelf !== e.target.value) {
             BooksAPI.update({ id: book.id }, e.target.value)
                 .then((res) => {})
