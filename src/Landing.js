@@ -18,7 +18,6 @@ class Landing extends Component {
     handleSetShelves = () => {
         BooksAPI.getAll()
             .then((res) => {
-                console.log(res);
                 let current = res.filter((book) => {
                     return book.shelf === "currentlyReading";
                 });
@@ -40,7 +39,6 @@ class Landing extends Component {
     };
 
     handleSwitchShelves = (e, book) => {
-        console.log(e.target.value);
         if (book.shelf !== e.target.value) {
             BooksAPI.update({ id: book.id }, e.target.value)
                 .then((res) => {

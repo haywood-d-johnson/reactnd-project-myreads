@@ -14,12 +14,17 @@ const BookDisplay = (props) => {
         height: 193,
         backgroundImage: img,
     };
+
+    const changeValue = (e) => {
+        handleSwitchShelves(e, book);
+    };
+
     return (
         <div className="book">
             <div className="book-top">
                 <div className="book-cover" style={bookStyle}></div>
                 <div className="book-shelf-changer">
-                    <select onChange={(e) => handleSwitchShelves(e, book)}>
+                    <select value={book.shelf} onChange={changeValue}>
                         <option value="move" disabled>
                             Move to...
                         </option>
