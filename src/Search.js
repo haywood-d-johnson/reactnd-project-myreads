@@ -5,32 +5,24 @@ import * as BooksAPI from "./BooksAPI";
 import BookDisplay from "./BookDisplay";
 
 class Search extends Component {
-    state = {
-        value: "",
-        books: [],
-    };
+    constructor(props) {
+        super(props);
+        this.state = {
+            books: [],
+        };
+        this.handleSearch = this.handleSearch.bind(this);
+    }
 
-    componentDidMount = () => {};
-
-    handleChange = (e) => {
-        this.setState({ value: e.target.value });
-        this.handleSearch();
-    };
-
-    handleSearch = () => {
-        BooksAPI.search(this.state.value)
+    async handleSearch(e) {
+        BooksAPI.search(e.target.value)
             .then((res) => {
                 this.setState({ books: res.length ? res : [] });
             })
             .catch((error) => {
                 console.log(error);
             });
-    };
+    }
 
-    /*
-    could be more modular...
-    add books to needed objectson landing page
-    */
     handleSwitchShelves = (e, book) => {
         if (book.shelf !== e.target.value) {
             BooksAPI.update({ id: book.id }, e.target.value)
@@ -42,7 +34,7 @@ class Search extends Component {
     };
 
     render() {
-        const { value, books } = this.state;
+        const { books } = this.state;
         return (
             <div>
                 <div className="search-books">
@@ -54,14 +46,13 @@ class Search extends Component {
                             <input
                                 type="text"
                                 placeholder="Search by title or author"
-                                value={value}
-                                onChange={this.handleChange}
+                                onChange={this.handleSearch}
                             />
                         </div>
                     </div>
                     <div className="search-books-results">
                         <ol className="books-grid">
-                            {books.length > 0 &&
+                            {Boolean(books.length) &&
                                 books.map((book) => {
                                     return (
                                         <li key={book.id}>

@@ -3,7 +3,11 @@ import PropTypes from "prop-types";
 
 const BookDisplay = (props) => {
     const { book, handleSwitchShelves } = props;
-    const img = `url(${book.imageLinks.smallThumbnail})`;
+    const img = `url(${
+        book.imageLinks && book.imageLinks.smallThumbnail
+            ? `${book.imageLinks.smallThumbnail}`
+            : `url(${"https://placehold.it/128x193.png&text=Image+Not+Available"})`
+    })`;
 
     const bookStyle = {
         width: 128,
