@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 import * as BooksAPI from "./BooksAPI";
 import BookDisplay from "./BookDisplay";
@@ -13,31 +14,25 @@ class Search extends Component {
         this.handleSearch = this.handleSearch.bind(this);
     }
 
+    static propTypes = {
+        handleSwitchShelves: PropTypes.func.isRequired,
+    };
+
     async handleSearch(e) {
         BooksAPI.search(e.target.value)
             .then((res) => {
-                this.setState({ books: res.length ? res : [] });
+                this.setState({
+                    books: res.length ? res : [],
+                });
             })
             .catch((error) => {
                 console.log(error);
             });
     }
 
-    handleSwitchShelves = (e, book) => {
-        console.log(book.id);
-        console.log(book.shelf);
-        console.log(e.target.value);
-        if (book.shelf !== e.target.value) {
-            BooksAPI.update({ id: book.id }, e.target.value)
-                .then((res) => {})
-                .catch((error) => {
-                    console.log(error);
-                });
-        }
-    };
-
     render() {
         const { books } = this.state;
+        const { handleSwitchShelves } = this.props;
         return (
             <div>
                 <div className="search-books">
@@ -62,7 +57,7 @@ class Search extends Component {
                                             <BookDisplay
                                                 book={book}
                                                 handleSwitchShelves={
-                                                    this.handleSwitchShelves
+                                                    handleSwitchShelves
                                                 }
                                             />
                                         </li>

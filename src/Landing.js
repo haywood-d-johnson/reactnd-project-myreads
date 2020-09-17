@@ -1,57 +1,70 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 import * as BooksAPI from "./BooksAPI";
 import BookShelf from "./BookShelf";
 
 class Landing extends Component {
-    state = {
-        currentlyReading: [],
-        wantToRead: [],
-        readBooks: [],
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentlyReading: [],
+            wantToRead: [],
+            readBooks: [],
+        };
+        this._isMounted = false;
+    }
+
+    static propTypes = {
+        handleSwitchShelves: PropTypes.func.isRequired,
     };
 
     componentDidMount = () => {
         this.handleSetShelves();
+        this._isMounted = true;
+    };
+
+    componentDidUpdate = () => {
+        this.handleSetShelves();
+    };
+
+    componentWillUnmount = () => {
+        this._isMounted = false;
     };
 
     handleSetShelves = () => {
-        BooksAPI.getAll()
-            .then((res) => {
-                let current = res.filter((book) => {
-                    return book.shelf === "currentlyReading";
-                });
-                let want = res.filter((book) => {
-                    return book.shelf === "wantToRead";
-                });
-                let read = res.filter((book) => {
-                    return book.shelf === "read";
-                });
-                this.setState({
-                    currentlyReading: current,
-                    wantToRead: want,
-                    readBooks: read,
-                });
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    };
-
-    handleSwitchShelves = (e, book) => {
-        if (book.shelf !== e.target.value) {
-            BooksAPI.update({ id: book.id }, e.target.value)
+        this._isMounted &&
+            BooksAPI.getAll()
                 .then((res) => {
-                    this.handleSetShelves();
+                    let current = res.filter((book) => {
+                        return book.shelf === "currentlyReading";
+                    });
+                    let want = res.filter((book) => {
+                        return book.shelf === "wantToRead";
+                    });
+                    let read = res.filter((book) => {
+                        return book.shelf === "read";
+                    });
+                    this.setState({
+                        currentlyReading: current,
+                        wantToRead: want,
+                        readBooks: read,
+                    });
                 })
                 .catch((error) => {
                     console.log(error);
                 });
-        }
+    };
+
+    handleSwitch = (e, book) => {
+        this.props.handleSwitchShelves(e, book);
+        this.handleSetShelves();
     };
 
     render() {
         const { currentlyReading, wantToRead, readBooks } = this.state;
+        const { handleSwitchShelves } = this.props;
         return (
             <div>
                 <div className="list-books">
@@ -63,17 +76,17 @@ class Landing extends Component {
                             <BookShelf
                                 books={currentlyReading}
                                 title="Currently Reading"
-                                handleSwitchShelves={this.handleSwitchShelves}
+                                handleSwitchShelves={handleSwitchShelves}
                             />
                             <BookShelf
                                 books={wantToRead}
                                 title="Want To Read"
-                                handleSwitchShelves={this.handleSwitchShelves}
+                                handleSwitchShelves={handleSwitchShelves}
                             />
                             <BookShelf
                                 books={readBooks}
                                 title="Read"
-                                handleSwitchShelves={this.handleSwitchShelves}
+                                handleSwitchShelves={handleSwitchShelves}
                             />
                         </div>
                     </div>

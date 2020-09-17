@@ -25,8 +25,7 @@ const BookDisplay = (props) => {
                 <div className="book-cover" style={bookStyle}></div>
                 <div className="book-shelf-changer">
                     <select
-                        defaultValue="none"
-                        //value={book.shelf}
+                        defaultValue={Boolean(book.shelf) ? book.shelf : "none"}
                         onChange={changeValue}
                     >
                         <option value="move" disabled>
